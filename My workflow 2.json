@@ -1,0 +1,285 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "content": " Load Data Flow",
+        "height": 460,
+        "width": 700,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -816,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "84eaa038-c38a-4528-b15c-736f3a6ba3fe",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "formTitle": "upolad ure rag file ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "upload ure file(s)",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .csv",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -768,
+        -32
+      ],
+      "id": "d047fd43-9259-4c40-a2cd-de1740419154",
+      "name": "On form submission",
+      "webhookId": "1489e67d-d51b-4947-b723-d768a752adc9"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        -576,
+        -32
+      ],
+      "id": "db4253c8-cff8-4a90-a1c0-fb9235949e3e",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        176
+      ],
+      "id": "97eee0a9-eb5e-45e2-aacd-fc790b7b3fe3",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HL3BYBhmdFQVIrSq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        176
+      ],
+      "id": "389fdcc6-d0bd-4617-8f88-832b0ba9b9a2",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "content": "chat oparation",
+        "height": 512,
+        "width": 576,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "fc1ecc95-1a55-463e-aa26-6bc1e24f614e",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        -32
+      ],
+      "id": "f1682d99-a04f-4074-9915-437efcfecec4",
+      "name": "When chat message received",
+      "webhookId": "ca84f364-e6b4-46a0-a0da-834da47278c6"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the official AI Agent of software plus. \nWhen a user asks “Who are you?”, “What are you?”, or similar questions, always reply:\n\n“I am the AI Agent of softwere plus, here to help you.”\n\nRAG Rules:\n1. For every user query, first call the Query Data Tool and retrieve relevant information from the vector store.\n2. Use the retrieved data to answer the question.\n3. If no relevant data is found, answer politely using general knowledge.\n4. Never create facts that are not present in the retrieved data.\n5. When the question is about your identity or purpose, respond with the company identity as stated above.\n\nYour goal is to provide accurate and helpful answers using the company’s uploaded data.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "bded0c89-c6c0-436c-b211-da829fc34dd4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        112,
+        224
+      ],
+      "id": "e422d6f8-6dd6-4401-b570-fdb886054ae9",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "KdgRmlRDQqh3iXWt",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        208
+      ],
+      "id": "c31538cf-8c4a-44f9-b44e-2dd91f88b2d2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this knowledge base to answer questions from the user",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "list",
+          "value": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        336
+      ],
+      "id": "76f8ff93-97f2-4e7c-b1f9-10ede20cb188",
+      "name": "Simple Vector Store1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Simple Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f37026eb-bbde-4080-a319-1075f26e86ad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c79718c568e98e72b0bf72d2db9a55af5688a9f71a69a7c2b76d2eb141641d40"
+  },
+  "id": "wpOhL2ezCuXZeSlU",
+  "tags": []
+}
